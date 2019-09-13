@@ -27,53 +27,7 @@ pipeline {
           steps {
             script {
               gitCommit = apptentiveGetReleaseCommit()
-              apptentiveDockerBuild('run', gitCommit)
-              imageName = apptentiveDockerBuild('build', "build-${gitCommit}")
-
-            }
-          }
-        }
-
-        stage('verification') {
-          parallel {
-            stage('unit test') {
-              steps {
-                script {
-                  container('docker') {
-                    sh "docker run ${imageName} make test"
-                  }
-                }
-              }
-            }
-
-            stage('int test') {
-              steps {
-                script {
-                  container('docker') {
-                    sh "docker run ${imageName} make int"
-                  }
-                }
-              }
-            }
-
-            stage('benchmark') {
-              steps {
-                script {
-                  container('docker') {
-                    sh "docker run ${imageName} make int"
-                  }
-                }
-              }
-            }
-
-            stage('lint') {
-              steps {
-                script {
-                  container('docker') {
-                    sh "docker run ${imageName} make lint"
-                  }
-                }
-              }
+              imageName = apptentiveDockerBuild('run', gitCommit)
             }
           }
         }

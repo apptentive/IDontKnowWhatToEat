@@ -1,4 +1,4 @@
-FROM node:12 AS build
+FROM node:12 AS run
 
 LABEL maintainer="Brett McGinnis <brett.mcginnis@apptentive.com>"
 
