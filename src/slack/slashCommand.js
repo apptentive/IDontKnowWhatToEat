@@ -1,5 +1,6 @@
-const yelp = require("./yelp");
-var request = require("request-promise-native");
+const request = require("request-promise-native");
+const yelp = require("../yelp");
+const util = require("./util");
 
 const helpText = [
   {
@@ -27,7 +28,7 @@ async function parseAndExecute(slashCommandString, responseUrl) {
   });
 
   if (shouldReturnHelpText) {
-    respond(responseUrl, {
+    util.respond(responseUrl, {
       text: helpText.map(h => `${h.command}: ${h.helpText}`).join("\n")
     });
   }
@@ -35,25 +36,12 @@ async function parseAndExecute(slashCommandString, responseUrl) {
 
 async function search(term, responseUrl) {
   const businesses = await yelp.search(term);
-  respond(responseUrl, buildAddRestaurantMessage(businesses));
-}
-
-async function respond(responseUrl, body) {
-  var options = {
-    method: "post",
-    body: body,
-    json: true,
-    url: responseUrl
-  };
-
-  await request(options, err => {
-    if (err) {
-      console.error("error posting json: ", err);
-    }
-  });
+  util.respond(responseUrl, buildAddRestaurantMessage(businesses));
 }
 
 function buildAddRestaurantMessage(restaurants) {
+  restaurants.sort((a, b) => a.distance - b.distance);
+
   const message = [
     {
       type: "section",
@@ -68,11 +56,18 @@ function buildAddRestaurantMessage(restaurants) {
     message.push({
       type: "divider"
     });
+
     message.push({
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*<${r.url}|${r.name}>*\nPrice: ${r.price}`
+        text: [
+          `*<${r.url}|${r.name}>*`,
+          `Price: ${r.price}`,
+          `Distance: ${Math.round(r.distance * 100) / 100}`,
+          `Address: ${r.address}`,
+          `Phone: ${r.phone}`
+        ].join("\n")
       },
       accessory: {
         type: "image",
@@ -80,20 +75,22 @@ function buildAddRestaurantMessage(restaurants) {
         alt_text: r.name
       }
     });
+
     message.push({
       type: "section",
       text: {
         type: "mrkdwn",
-        text: "You can add an image next to text in this block."
+        text: "Add this restaurant to Apptentive's lunch list"
       },
       accessory: {
         type: "button",
+        action_id: "add_restaurant",
         text: {
           type: "plain_text",
           text: "Add 🍴",
           emoji: true
         },
-        value: "add_resturant"
+        value: r.id
       }
     });
   });

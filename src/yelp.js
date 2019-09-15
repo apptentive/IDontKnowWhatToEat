@@ -14,7 +14,7 @@ const yelpAuth = {
 async function search(term) {
   const searchUrl = `https://api.yelp.com/v3/businesses/search?term=${encodeURIComponent(
     term
-  )}&latitude=${location.latitude}&longitude=${location.longitude}`;
+  )}&latitude=${location.latitude}&longitude=${location.longitude}&limit=5`;
 
   let businesses;
 
@@ -30,7 +30,8 @@ async function search(term) {
           address: b.location.display_address,
           phone: b.phone,
           url: b.url,
-          image: b.image_url
+          image: b.image_url,
+          distance: b.distance * 0.00062137 // Yelp returns meters, Murica!
         };
       });
     }
@@ -39,6 +40,36 @@ async function search(term) {
   return businesses;
 }
 
+async function get(id) {
+  const url = `https://api.yelp.com/v3/businesses/${id}`;
+
+  let r;
+
+  await request.get(url, yelpAuth, (error, response, body) => {
+    if (error) {
+      return Promise.reject(new Error(error));
+    }
+
+    const yelpBusiness = JSON.parse(body);
+    r = {
+      id: yelpBusiness.id,
+      name: yelpBusiness.name,
+      imageUrl: yelpBusiness.image_url,
+      url: yelpBusiness.url,
+      phone: yelpBusiness.phone,
+      categories: yelpBusiness.categories,
+      yelpRating: yelpBusiness.rating,
+      address: yelpBusiness.location.address1,
+      yelpPrice: yelpBusiness.price
+    };
+  });
+
+  return r;
+}
+
+// https://api.yelp.com/v3/businesses/{id}
+
 module.exports = {
-  search
+  search,
+  get
 };

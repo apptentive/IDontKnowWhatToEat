@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const storage = require("./src/storage");
-const slashCommand = require("./src/slashCommand");
+const slack = require("./src/slack");
 
 const app = express();
 const port = 3000;
@@ -35,7 +35,16 @@ app.use(function(req, res, next) {
 
 app.post("/response", async (req, res) => {
   if (req && req.body && req.body.payload) {
-    const thing = JSON.parse(req.body.payload);
+    const payload = JSON.parse(req.body.payload);
+
+    slack.response.parseAndExecute({
+      actions: payload.actions,
+      responseUrl: payload.response_url,
+      requester: {
+        name: payload.user.name,
+        slackId: payload.user.id
+      }
+    });
     res.send();
   } else {
     res.err;
@@ -43,7 +52,7 @@ app.post("/response", async (req, res) => {
 });
 
 app.post("/", async (req, res) => {
-  slashCommand.parseAndExecute(req.body.text, req.body.response_url);
+  slack.slashCommand.parseAndExecute(req.body.text, req.body.response_url);
   res.send();
 });
 

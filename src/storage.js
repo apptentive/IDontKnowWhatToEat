@@ -1,10 +1,10 @@
 const fs = require("fs");
 const dbPath = "./db.json";
 
-const entries = [];
+let entries = [];
 
-async function getAllEntries() {
-  const rawdata = fs.readFileSync(dbPath);
+function getAllEntries() {
+  const rawdata = fs.readFileSync(dbPath, "utf8");
 
   try {
     entries = JSON.parse(rawdata);
@@ -13,6 +13,10 @@ async function getAllEntries() {
     process.exit(1);
   }
 
+  return entries;
+}
+
+async function getAll() {
   return entries;
 }
 
@@ -29,7 +33,7 @@ async function seed() {
 
 function init() {
   if (fs.existsSync(dbPath)) {
-    console.log("Db.json found, using existing file");
+    entries = getAllEntries();
   } else {
     const emptyList = [];
 
@@ -42,7 +46,7 @@ function init() {
 init();
 
 module.exports = {
-  getAllEntries,
   add,
-  seed
+  seed,
+  getAll
 };
