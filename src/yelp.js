@@ -60,14 +60,13 @@ async function get(id) {
       categories: yelpBusiness.categories,
       yelpRating: yelpBusiness.rating,
       address: yelpBusiness.location.address1,
-      yelpPrice: yelpBusiness.price
+      yelpPrice: yelpBusiness.price,
+      location: yelpBusiness.coordinates
     };
   });
 
   return r;
 }
-
-// https://api.yelp.com/v3/businesses/{id}
 
 module.exports = {
   search,

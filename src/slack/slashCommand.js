@@ -1,12 +1,20 @@
 const request = require("request-promise-native");
 const yelp = require("../yelp");
 const util = require("./util");
+const storage = require("../storage");
 
 const helpText = [
   {
-    command: "search",
-    helpText: "for lunch options near the office",
-    method: search
+    command: "add",
+    shortCommand: "a",
+    helpText: "returns a list of restaurants that can be added to our list",
+    method: add
+  },
+  {
+    command: "categories",
+    shortCommand: "c",
+    helpText: "lists all categories for our restaurants",
+    method: listCategories
   }
 ];
 
@@ -16,25 +24,37 @@ async function parseAndExecute(slashCommandString, responseUrl) {
   let shouldReturnHelpText = true;
 
   helpText.forEach(c => {
-    if (slashCommandString.toLowerCase().startsWith(c.command)) {
+    if (
+      slashCommandString.toLowerCase().startsWith(c.command) ||
+      slashCommandString.toLowerCase().startsWith(c.shortCommand)
+    ) {
+      let start = c.shortCommand.length;
+
+      if (slashCommandString.toLowerCase().startsWith(c.command)) {
+        start = c.command.length;
+      }
+
       c.method(
-        slashCommandString
-          .substring(c.command.length, slashCommandString.length)
-          .trim(),
-        responseUrl
+        responseUrl,
+        slashCommandString.substring(start, slashCommandString.length).trim()
       );
+
       shouldReturnHelpText = false;
     }
   });
 
   if (shouldReturnHelpText) {
     util.respond(responseUrl, {
-      text: helpText.map(h => `${h.command}: ${h.helpText}`).join("\n")
+      text:
+        "Available Commands:\n" +
+        helpText
+          .map(h => `\`${h.command}\`, \`${h.shortCommand}\`: \n>${h.helpText}`)
+          .join("\n")
     });
   }
 }
 
-async function search(term, responseUrl) {
+async function add(responseUrl, term) {
   const businesses = await yelp.search(term);
   util.respond(responseUrl, buildAddRestaurantMessage(businesses));
 }
@@ -100,7 +120,16 @@ function buildAddRestaurantMessage(restaurants) {
   };
 }
 
+async function listCategories(responseUrl) {
+  const restaurants = await storage.getAll();
+  const categories = restaurants.map(r => r.categories.map(c => c.title));
+  const uniqueCategories = [...new Set(...categories)];
+  
+  await util.respond(responseUrl, {
+    text: uniqueCategories.sort().join("\n")
+  });
+}
+
 module.exports = {
-  parseAndExecute,
-  search
+  parseAndExecute
 };

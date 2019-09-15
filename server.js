@@ -13,6 +13,11 @@ if (!process.env["YELP_TOKEN"]) {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get("/db", async (req, res) => {
+  const restaurants = await storage.getAll();
+  res.send(restaurants);
+});
+
 app.use(function(req, res, next) {
   if (!(req && req.body)) {
     res.send("No body to parse");
@@ -20,7 +25,7 @@ app.use(function(req, res, next) {
 
   let token = req.body.token || undefined;
 
-  // Message Responses put token payload
+  // Message Responses put token in payload
   if (req.body.payload) {
     const payload = JSON.parse(req.body.payload);
     token = payload.token;

@@ -14,6 +14,9 @@ async function parseAndExecute(ops) {
   ops.actions.forEach(async a => {
     if (a.action_id === "add_restaurant") {
       const r = await addRestaurant(a.value);
+      util.respond(ops.responseUrl, {
+        text: `Thanks! We added ${r.name}`
+      });
     }
   });
 }
@@ -21,26 +24,12 @@ async function parseAndExecute(ops) {
 async function addRestaurant(id) {
   const r = await yelp.get(id);
 
-  // const r = {
-  //   id: yelpBusiness.id,
-  //   name: yelpBusiness.name,
-  //   imageUrl: yelpBusiness.image_url,
-  //   url: yelpBusiness.url,
-  //   phone: yelpBusiness.phone,
-  //   categories: yelpBusiness.categories,
-  //   yelpRating: yelpBusiness.rating,
-  //   address: yelpBusiness.location.address1,
-  //   yelpPrice: yelpBusiness.price
-  // };
-
   if (r) {
     await storage.add(r);
+    return r;
   }
-
-  return r;
 }
 
 module.exports = {
-  parseAndExecute,
-  addRestaurant
+  parseAndExecute
 };

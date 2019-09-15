@@ -20,8 +20,16 @@ async function getAll() {
   return entries;
 }
 
-async function add(entry) {
-  entries.push(entry);
+async function add(restaurant) {
+  const existingRestaurantIndex = entries.findIndex(
+    e => e.id === restaurant.id
+  );
+
+  if (existingRestaurantIndex >= 0) {
+    entries[existingRestaurantIndex] = restaurant;
+  } else {
+    entries.push(restaurant);
+  }
 
   const data = JSON.stringify(entries);
   fs.writeFileSync(dbPath, data);
