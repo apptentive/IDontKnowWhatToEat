@@ -14,7 +14,7 @@ if (!process.env.YELP_TOKEN) {
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/db', async (req, res) => {
-  const restaurants = await storage.getAll();
+  const restaurants = await storage.getDb();
   res.send(restaurants);
 });
 

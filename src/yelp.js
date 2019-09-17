@@ -43,6 +43,7 @@ async function get(id) {
 
   let r;
 
+  // eslint-disable-next-line consistent-return
   await request.get(url, yelpAuth, (error, response, body) => {
     if (error) {
       return Promise.reject(new Error(error));
