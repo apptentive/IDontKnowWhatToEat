@@ -31,13 +31,13 @@ pipeline {
             }
           }
         }
-      }
 
-      stage('lint') {
-        steps {
-          script {
-            container('docker') {
-              sh "docker run ${imageName} npm run lint"
+        stage('lint') {
+          steps {
+            script {
+              container('docker') {
+                sh "docker run ${imageName} npm run lint"
+              }
             }
           }
         }
