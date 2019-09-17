@@ -44,16 +44,6 @@ pipeline {
               }
             }
           }
-
-          // stage('test') {
-          //   steps {
-          //     script {
-          //       container('docker') {
-          //         sh "docker run ${imageName} npm run test:ci"
-          //       }
-          //     }
-          //   }
-          // }
         }
       }
     }
