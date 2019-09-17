@@ -1,26 +1,26 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const storage = require("./src/storage");
-const slack = require("./src/slack");
+const express = require('express');
+const bodyParser = require('body-parser');
+const storage = require('./src/storage');
+const slack = require('./src/slack');
 
 const app = express();
 const port = 8080;
 
-if (!process.env["YELP_TOKEN"]) {
-  console.error("PASS IN YELP_TOKEN as an environment variable");
+if (!process.env.YELP_TOKEN) {
+  console.error('PASS IN YELP_TOKEN as an environment variable');
   process.exit(1);
 }
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/db", async (req, res) => {
+app.get('/db', async (req, res) => {
   const restaurants = await storage.getAll();
   res.send(restaurants);
 });
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   if (!(req && req.body)) {
-    res.send("No body to parse");
+    res.send('No body to parse');
   }
 
   let token = req.body.token || undefined;
@@ -31,14 +31,14 @@ app.use(function(req, res, next) {
     token = payload.token;
   }
 
-  if (process.env["SLACK_TOKEN"] == token) {
+  if (process.env.SLACK_TOKEN === token) {
     next();
   } else {
-    res.status(401).send("Invalid Token");
+    res.status(401).send('Invalid Token');
   }
 });
 
-app.post("/response", async (req, res) => {
+app.post('/response', async (req, res) => {
   if (req && req.body && req.body.payload) {
     const payload = JSON.parse(req.body.payload);
 
@@ -47,16 +47,15 @@ app.post("/response", async (req, res) => {
       responseUrl: payload.response_url,
       requester: {
         name: payload.user.name,
-        slackId: payload.user.id
-      }
+        slackId: payload.user.id,
+      },
     });
-    res.send();
-  } else {
-    res.err;
   }
+
+  res.send();
 });
 
-app.post("/", async (req, res) => {
+app.post('/', async (req, res) => {
   slack.slashCommand.parseAndExecute(req.body.text, req.body.response_url);
   res.send();
 });

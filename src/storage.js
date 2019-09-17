@@ -1,15 +1,16 @@
-const fs = require("fs");
-const dbPath = "./db.json";
+const fs = require('fs');
+
+const dbPath = './db.json';
 
 let entries = [];
 
 function getAllEntries() {
-  const rawdata = fs.readFileSync(dbPath, "utf8");
+  const rawdata = fs.readFileSync(dbPath, 'utf8');
 
   try {
     entries = JSON.parse(rawdata);
   } catch (err) {
-    console.error("Unable to parse db, exiting");
+    console.error('Unable to parse db, exiting');
     process.exit(1);
   }
 
@@ -22,7 +23,7 @@ async function getAll() {
 
 async function add(restaurant) {
   const existingRestaurantIndex = entries.findIndex(
-    e => e.id === restaurant.id
+    (e) => e.id === restaurant.id,
   );
 
   if (existingRestaurantIndex >= 0) {
@@ -36,7 +37,7 @@ async function add(restaurant) {
 }
 
 async function seed() {
-  add({ taco: "tuesdays" });
+  add({ taco: 'tuesdays' });
 }
 
 function init() {
@@ -56,5 +57,5 @@ init();
 module.exports = {
   add,
   seed,
-  getAll
+  getAll,
 };

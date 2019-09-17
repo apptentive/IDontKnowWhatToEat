@@ -1,20 +1,20 @@
-const request = require("request");
+const request = require('request');
 
 async function respond(responseUrl, body) {
-  var options = {
-    method: "post",
-    body: body,
+  const options = {
+    method: 'post',
+    body,
     json: true,
-    url: responseUrl
+    url: responseUrl,
   };
 
-  await request(options, err => {
+  await request(options, (err) => {
     if (err) {
-      console.error("error posting json: ", err);
+      console.error('error posting json: ', err);
     }
   });
 }
 
 module.exports = {
-  respond
+  respond,
 };
