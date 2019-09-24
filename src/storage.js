@@ -1,52 +1,73 @@
-const fs = require("fs");
-const dbPath = "./db.json";
+const fs = require('fs');
 
-let entries = [];
+const dbPath = './db.json';
 
-function getAllEntries() {
-  const rawdata = fs.readFileSync(dbPath, "utf8");
+let db = {
+  restaurants: [],
+  users: [],
+};
+
+function getDb() {
+  const rawdata = fs.readFileSync(dbPath, 'utf8');
 
   try {
-    entries = JSON.parse(rawdata);
+    db = JSON.parse(rawdata);
   } catch (err) {
-    console.error("Unable to parse db, exiting");
+    console.error('Unable to parse db, exiting');
     process.exit(1);
   }
 
-  return entries;
+  return db;
 }
 
-async function getAll() {
-  return entries;
+function writeDb() {
+  fs.writeFileSync(dbPath, JSON.stringify(db));
+}
+
+async function getAllRestaurants() {
+  return db.restaurants;
 }
 
 async function add(restaurant) {
-  const existingRestaurantIndex = entries.findIndex(
-    e => e.id === restaurant.id
-  );
+  const existingRestaurantIndex = db.restaurants.findIndex((e) => e.id === restaurant.id);
 
   if (existingRestaurantIndex >= 0) {
-    entries[existingRestaurantIndex] = restaurant;
+    db.restaurants[existingRestaurantIndex] = restaurant;
   } else {
-    entries.push(restaurant);
+    db.restaurants.push(restaurant);
   }
 
-  const data = JSON.stringify(entries);
-  fs.writeFileSync(dbPath, data);
+  await writeDb();
 }
 
-async function seed() {
-  add({ taco: "tuesdays" });
+async function updateUserReview(ops) {
+  if (!ops.slackId) {
+    return Promise.reject(new Error('Need slackId to update a user'));
+  }
+
+  if (!ops.yelpId) {
+    return Promise.reject(new Error('Need yelpId to update a user'));
+  }
+
+  const userIndex = db.users.findIndex((u) => u.slackId === ops.slackId);
+
+  if (userIndex >= 0) {
+    db.users[userIndex].addedRestaurants.push(ops.yelpId);
+  } else {
+    db.users.push({
+      slackId: ops.slackId,
+      addedRestaurants: [ops.yelpId],
+    });
+  }
+
+  return writeDb();
 }
 
 function init() {
   if (fs.existsSync(dbPath)) {
-    entries = getAllEntries();
+    db = getDb();
   } else {
-    const emptyList = [];
-
-    const data = JSON.stringify(emptyList);
-
+    const data = JSON.stringify(db);
     fs.writeFileSync(dbPath, data);
   }
 }
@@ -54,7 +75,8 @@ function init() {
 init();
 
 module.exports = {
+  getDb,
   add,
-  seed,
-  getAll
+  getAllRestaurants,
+  updateUserReview,
 };
