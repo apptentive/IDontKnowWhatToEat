@@ -39,7 +39,7 @@ pipeline {
               steps {
                 script {
                   container('docker') {
-                    sh "docker run ${imageName} npm run test"
+                    sh "docker run -e SLACK_TOKEN=${SLACK_TOKEN} -e YELP_TOKEN=${YELP_TOKEN} ${imageName} npm run test"
                   }
                 }
               }
