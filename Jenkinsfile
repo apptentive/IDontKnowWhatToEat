@@ -11,6 +11,11 @@ pipeline {
     }
   }
 
+  environment {
+      YELP_TOKEN = credentials('yelpIDontKnowWhatToEat')
+      SLACK_TOKEN = credentials('slackIDontKnowWhatToEat')
+  }
+
   options {
     timeout(time: 10, unit: 'MINUTES')
   }
@@ -35,16 +40,11 @@ pipeline {
 
         stage('verification') {
           parallel {
-            withCredentials([
-              string(credentialsId: 'yelpIDontKnowWhatToEat', variable: 'YELP_TOKEN'),
-              string(credentialsId: 'slackIDontKnowWhatToEat', variable: 'SLACK_TOKEN')
-              ]) {
-              stage('int test') {
-                steps {
-                  script {
-                    container('docker') {
-                      sh "docker run -e SLACK_TOKEN=${SLACK_TOKEN} -e YELP_TOKEN=${YELP_TOKEN} ${imageName} npm run test"
-                    }
+            stage('int test') {
+              steps {
+                script {
+                  container('docker') {
+                    sh "docker run -e SLACK_TOKEN=${SLACK_TOKEN} -e YELP_TOKEN=${YELP_TOKEN} ${imageName} npm run test"
                   }
                 }
               }
