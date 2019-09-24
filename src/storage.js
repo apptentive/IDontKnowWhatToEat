@@ -23,7 +23,6 @@ function getDb() {
 
 function writeDb() {
   fs.writeFileSync(dbPath, JSON.stringify(db));
-
 }
 
 // Deletes all database, should be used for testing only

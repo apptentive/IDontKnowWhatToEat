@@ -27,16 +27,32 @@ pipeline {
           steps {
             script {
               gitCommit = apptentiveGetReleaseCommit()
-              imageName = apptentiveDockerBuild('run', gitCommit)
+              apptentiveDockerBuild('run', gitCommit)
+              imageName = apptentiveDockerBuild('build', "build-${gitCommit}")
+
             }
           }
         }
 
-        stage('lint') {
-          steps {
-            script {
-              container('docker') {
-                sh "docker run ${imageName} npm run lint"
+        stage('verification') {
+          parallel {
+            stage('int test') {
+              steps {
+                script {
+                  container('docker') {
+                    sh "docker run ${imageName} npm run test"
+                  }
+                }
+              }
+            }
+
+            stage('lint') {
+              steps {
+                script {
+                  container('docker') {
+                    sh "docker run ${imageName} npm run lint"
+                  }
+                }
               }
             }
           }
