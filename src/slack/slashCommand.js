@@ -73,7 +73,7 @@ async function listCategories(responseUrl) {
   const categories = restaurants.map((r) => r.categories.map((c) => c.title));
   const uniqueCategories = [...new Set(...categories)];
 
-  let text = uniqueCategories.sort().join('\n');
+  let text = uniqueCategories.sort().join(', ');
 
   if (!text) {
     text = 'No categories yet, be the first to add a restaurant';

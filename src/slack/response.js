@@ -3,6 +3,12 @@ const yelp = require('../yelp');
 const util = require('./util');
 
 async function addRestaurant(id) {
+  const allRs = await storage.getAllRestaurants();
+  const savedR = allRs.filter((r) => r.id === id);
+  if (savedR.length > 0) {
+    return savedR;
+  }
+
   const r = await yelp.get(id);
 
   if (r) {
@@ -32,8 +38,6 @@ async function parseAndExecute(ops) {
         text: `Thanks! We added ${r.name}`,
       });
 
-      console.log('asdf');
-
       await storage.updateUserReview({
         slackId: ops.requester.slackId,
         yelpId: r.id,
@@ -46,4 +50,5 @@ async function parseAndExecute(ops) {
 
 module.exports = {
   parseAndExecute,
+  addRestaurant,
 };
