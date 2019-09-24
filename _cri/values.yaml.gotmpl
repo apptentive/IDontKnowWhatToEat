@@ -2,6 +2,11 @@
 deployment:
   enabled: true
 
+  persistence:
+    enabled: true
+    mountPath: /var/data
+    size: 1Gi
+
   podTemplate:
     annotations:
       commit: {{env "RELEASE_COMMIT"}}
