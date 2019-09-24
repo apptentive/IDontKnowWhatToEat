@@ -27,8 +27,7 @@ pipeline {
           steps {
             script {
               gitCommit = apptentiveGetReleaseCommit()
-              apptentiveDockerBuild('run', gitCommit)
-              imageName = apptentiveDockerBuild('build', "build-${gitCommit}")
+              imageName = apptentiveDockerBuild('run', gitCommit)
 
             }
           }
