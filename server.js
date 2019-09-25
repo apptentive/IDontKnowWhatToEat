@@ -13,11 +13,6 @@ if (!process.env.YELP_TOKEN) {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/db', async (req, res) => {
-  const restaurants = await storage.getDb();
-  res.send(restaurants);
-});
-
 app.use((req, res, next) => {
   if (!(req && req.body)) {
     res.send('No body to parse');
@@ -53,6 +48,11 @@ app.post('/response', async (req, res) => {
   }
 
   res.send();
+});
+
+app.get('/db', async (req, res) => {
+  const restaurants = await storage.getDb();
+  res.send(restaurants);
 });
 
 app.post('/', async (req, res) => {
