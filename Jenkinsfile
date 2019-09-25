@@ -17,7 +17,10 @@ pipeline {
   stages {
     stage('Dev PR') {
       when {
-        changeRequest target: 'dev'
+        anyOf {
+          changeRequest target: 'dev'
+          branch 'dev'
+        }
         expression { env.ENVIRONMENT == 'dev' }
       }
 
