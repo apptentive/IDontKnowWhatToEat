@@ -2,6 +2,11 @@
 deployment:
   enabled: true
 
+  persistence:
+    enabled: true
+    mountPath: /app/db.json
+    size: 1Gi
+
   podTemplate:
     annotations:
       commit: {{env "RELEASE_COMMIT"}}
@@ -40,7 +45,7 @@ service:
   annotations:
 
 {{ if not ( (or (eq .Environment.Name "production") (eq .Environment.Name "staging"))) }}
-    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "false"
 {{ end }}
 
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{.Environment.Values.externalCertArn}}

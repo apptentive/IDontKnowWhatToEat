@@ -10,12 +10,6 @@ pipeline {
       yamlFile './_cri/KubernetesBuildPod.yaml'
     }
   }
-
-  environment {
-      YELP_TOKEN = credentials('yelpIDontKnowWhatToEat')
-      SLACK_TOKEN = credentials('slackIDontKnowWhatToEat')
-  }
-
   options {
     timeout(time: 10, unit: 'MINUTES')
   }
@@ -25,6 +19,11 @@ pipeline {
       when {
         changeRequest target: 'dev'
         expression { env.ENVIRONMENT == 'dev' }
+      }
+
+      environment {
+        YELP_TOKEN = credentials('yelpIDontKnowWhatToEat')
+        SLACK_TOKEN = credentials('slackIDontKnowWhatToEat')
       }
 
       stages {
