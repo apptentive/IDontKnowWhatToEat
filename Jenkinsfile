@@ -11,6 +11,11 @@ pipeline {
     }
   }
 
+  environment {
+      YELP_TOKEN = credentials('yelpIDontKnowWhatToEat')
+      SLACK_TOKEN = credentials('slackIDontKnowWhatToEat')
+  }
+
   options {
     timeout(time: 10, unit: 'MINUTES')
   }
@@ -28,15 +33,30 @@ pipeline {
             script {
               gitCommit = apptentiveGetReleaseCommit()
               imageName = apptentiveDockerBuild('run', gitCommit)
+
             }
           }
         }
 
-        stage('lint') {
-          steps {
-            script {
-              container('docker') {
-                sh "docker run ${imageName} npm run lint"
+        stage('verification') {
+          parallel {
+            stage('int test') {
+              steps {
+                script {
+                  container('docker') {
+                    sh "docker run -e SLACK_TOKEN=${SLACK_TOKEN} -e YELP_TOKEN=${YELP_TOKEN} ${imageName} npm run test"
+                  }
+                }
+              }
+            }
+
+            stage('lint') {
+              steps {
+                script {
+                  container('docker') {
+                    sh "docker run ${imageName} npm run lint"
+                  }
+                }
               }
             }
           }

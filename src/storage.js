@@ -7,6 +7,7 @@ let db = {
   users: [],
 };
 
+
 function getDb() {
   const rawdata = fs.readFileSync(dbPath, 'utf8');
 
@@ -22,6 +23,13 @@ function getDb() {
 
 function writeDb() {
   fs.writeFileSync(dbPath, JSON.stringify(db));
+}
+
+// Deletes all database, should be used for testing only
+function resetDb() {
+  db.restaurants = [];
+  db.users = [];
+  writeDb();
 }
 
 async function getAllRestaurants() {
@@ -79,4 +87,5 @@ module.exports = {
   add,
   getAllRestaurants,
   updateUserReview,
+  resetDb,
 };

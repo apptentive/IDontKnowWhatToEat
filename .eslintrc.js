@@ -2,17 +2,19 @@ module.exports = {
   env: {
     commonjs: true,
     es6: true,
-    node: true
+    node: true,
+    'jest/globals': true
   },
-  extends: ["airbnb-base"],
+  extends: ['airbnb-base', 'plugin:jest/recommended'],
+  plugins: ['jest'],
   globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly"
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly'
   },
   parserOptions: {
     ecmaVersion: 2018
   },
   rules: {
-    "no-console": ["error", { allow: ["warn", "error", "log"] }]
+    'no-console': ['error', { allow: ['warn', 'error', 'log'] }]
   }
 };
