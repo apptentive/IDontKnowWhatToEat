@@ -10,6 +10,9 @@ RUN npm i
 
 COPY . .
 
-EXPOSE 8080
+RUN mkdir -p "/app/data"
 
+ENV DB_PATH="/app/data/db.json"
+
+EXPOSE 8080
 CMD npm start
