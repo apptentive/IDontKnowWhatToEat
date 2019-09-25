@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const dbPath = './db.json';
+const dbPath = process.env.DB_PATH || './db.json';
 
 let db = {
   restaurants: [],

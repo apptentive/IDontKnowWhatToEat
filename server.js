@@ -13,6 +13,10 @@ if (!process.env.YELP_TOKEN) {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get('/', async (req, res) => {
+  res.status(200).send('Ship it');
+});
+
 app.use((req, res, next) => {
   if (!(req && req.body)) {
     res.send('No body to parse');
