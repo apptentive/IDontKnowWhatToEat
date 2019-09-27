@@ -59,7 +59,7 @@ app.get('/db', async (req, res) => {
   res.send(restaurants);
 });
 
-app.post('/', async (req, res) => {
+app.post('/slash', async (req, res) => {
   slack.slashCommand.parseAndExecute(req.body.text, req.body.response_url);
   res.send();
 });
