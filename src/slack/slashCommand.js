@@ -69,7 +69,7 @@ async function add(responseUrl, term) {
 }
 
 async function listCategories(responseUrl) {
-  const restaurants = await storage.getAll();
+  const restaurants = await storage.getAllRestaurants();
   const categories = restaurants.map((r) => r.categories.map((c) => c.title));
   const uniqueCategories = [...new Set(...categories)];
 
