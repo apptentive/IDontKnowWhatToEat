@@ -1,72 +1,12 @@
 const yelp = require('../yelp');
 const util = require('./util');
 const categories = require('../categories');
-
-
-function buildAddRestaurantMessage(restaurants) {
-  restaurants.sort((a, b) => a.distance - b.distance);
-
-  const message = [
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: `We found *${restaurants.length} Restaurants* nearby, Use the button to pick ➜`,
-      },
-    },
-  ];
-
-  restaurants.forEach((r) => {
-    message.push({
-      type: 'divider',
-    });
-
-    message.push({
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: [
-          `*<${r.url}|${r.name}>*`,
-          `Price: ${r.price}`,
-          `Distance: ${Math.round(r.distance * 100) / 100}`,
-          `Address: ${r.address}`,
-          `Phone: ${r.phone}`,
-        ].join('\n'),
-      },
-      accessory: {
-        type: 'image',
-        image_url: r.image,
-        alt_text: r.name,
-      },
-    });
-
-    message.push({
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: "Add this restaurant to Apptentive's lunch list",
-      },
-      accessory: {
-        type: 'button',
-        action_id: 'add_restaurant',
-        text: {
-          type: 'plain_text',
-          text: 'Add 🍴',
-          emoji: true,
-        },
-        value: r.id,
-      },
-    });
-  });
-
-  return {
-    blocks: message,
-  };
-}
+const { list } = require('../restaurant');
+const UI = require('./ui');
 
 async function add(responseUrl, term) {
   const businesses = await yelp.search(term);
-  util.respond(responseUrl, buildAddRestaurantMessage(businesses));
+  util.respond(responseUrl, UI.buildAddRestaurantMessage(businesses));
 }
 
 async function listCategories(responseUrl) {
@@ -74,12 +14,17 @@ async function listCategories(responseUrl) {
   let text = c.sort().join(', ');
 
   if (!text) {
-    text = 'No categories yet, be the first to add a restaurant';
+    text = 'No categories yet, be the first to add your favorite restaurant!';
   }
 
   await util.respond(responseUrl, {
     text,
   });
+}
+
+async function rateResturant(responseUrl, term) {
+  const businesses = await list.search(term);
+  util.respond(responseUrl, UI.buildRateRestaurantMessage(businesses));
 }
 
 const helpText = [
@@ -95,6 +40,12 @@ const helpText = [
     helpText: 'lists all categories for our restaurants',
     method: listCategories,
   },
+  {
+    command: 'rate',
+    shortCommand: 'r',
+    helpText: 'rate a resturant from the lists all our restaurants',
+    method: rateResturant,
+  },
 ];
 
 async function parseAndExecute(slashCommandString, responseUrl) {
@@ -104,13 +55,10 @@ async function parseAndExecute(slashCommandString, responseUrl) {
   let shouldReturnHelpText = true;
 
   helpText.forEach((c) => {
-    if (
-      slashCommandString.toLowerCase().startsWith(c.command)
-      || slashCommandString.toLowerCase().startsWith(c.shortCommand)
-    ) {
+    const lower = slashCommandString.toLowerCase();
+    if (lower.startsWith(c.command) || lower.startsWith(c.shortCommand)) {
       let start = c.shortCommand.length;
-
-      if (slashCommandString.toLowerCase().startsWith(c.command)) {
+      if (lower.startsWith(c.command)) {
         start = c.command.length;
       }
 
