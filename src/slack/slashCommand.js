@@ -97,12 +97,6 @@ const helpText = [
     helpText: 'lists all categories for our restaurants',
     method: listCategories,
   },
-  {
-    command: 'love',
-    shortCommand: 'l',
-    helpText: 'love, or favorite, a restaurant',
-    method: listCategories,
-  },
 ];
 
 async function parseAndExecute(slashCommandString, responseUrl) {
