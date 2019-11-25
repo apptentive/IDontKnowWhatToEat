@@ -1,9 +1,10 @@
 const { list } = require('./list');
 const { add } = require('./add');
-const { getHandler } = require('./endpoint');
+const { listHandler, addHandler } = require('./endpoint');
 
 module.exports = {
   list,
-  getHandler,
+  listHandler,
+  addHandler,
   add,
 };

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const asyncHandler = require('express-async-handler');
 const storage = require('./src/storage');
 const slack = require('./src/slack');
-const restaurant = require('./src/restaurant/endpoint');
+const restaurant = require('./src/restaurant');
 const categories = require('./src/categories');
 
 const app = express();
@@ -67,7 +67,8 @@ app.post('/slash', async (req, res) => {
   res.send();
 });
 
-app.get('/restaurant', asyncHandler(restaurant.getHandler));
+app.get('/restaurant', asyncHandler(restaurant.listHandler));
+app.post('/restaurant', asyncHandler(restaurant.addHandler));
 app.get('/categories', asyncHandler(categories.handler));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
