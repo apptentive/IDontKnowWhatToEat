@@ -1,19 +1,10 @@
 const storage = require('../storage');
-const yelp = require('../yelp');
+// const yelp = require('../yelp');
 const util = require('./util');
+const restaurant = require('../restaurant');
 
 async function addRestaurant(id) {
-  const allRs = await storage.getAllRestaurants();
-  const savedR = allRs.filter((r) => r.id === id);
-  if (savedR.length > 0) {
-    return savedR;
-  }
-
-  const r = await yelp.get(id);
-
-  if (r) {
-    await storage.add(r);
-  }
+  const r = await restaurant.add(id);
 
   return r;
 }

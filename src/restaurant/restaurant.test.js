@@ -1,5 +1,6 @@
-const response = require('./response');
 const storage = require('../storage');
+const { list } = require('./list');
+const { add } = require('./add');
 
 beforeEach(() => {
   storage.resetDb();
@@ -8,23 +9,23 @@ beforeEach(() => {
 const ludisId = 'ultF6EfzuR_S3-QJyx67rw';
 
 test('should be able to add restaurant', async () => {
-  let rs = await storage.getAllRestaurants();
+  let rs = await list();
   expect(rs.length).toBe(0);
 
-  await response.addRestaurant(ludisId);
-  rs = await storage.getAllRestaurants();
+  await add(ludisId);
+  rs = await list();
   expect(rs.length).toBe(1);
 });
 
 test('should be able to add restaurant twice, but only save first instance', async () => {
-  let rs = await storage.getAllRestaurants();
+  let rs = await list();
   expect(rs.length).toBe(0);
 
-  await response.addRestaurant(ludisId);
-  rs = await storage.getAllRestaurants();
+  await add(ludisId);
+  rs = await list();
   expect(rs.length).toBe(1);
 
-  await response.addRestaurant(ludisId);
-  rs = await storage.getAllRestaurants();
+  await add(ludisId);
+  rs = await list();
   expect(rs.length).toBe(1);
 });
