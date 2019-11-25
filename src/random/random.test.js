@@ -10,3 +10,13 @@ test('should be random with min', async () => {
   const r = await random(10, 5);
   expect(r).toBeGreaterThan(5);
 });
+
+test('should be random with max only', async () => {
+  const r = await random(10);
+  expect(r).toBeGreaterThan(0);
+});
+
+test('should be random with max inclusive', async () => {
+  const r = await random(10, 10);
+  expect(r).toBe(10);
+});

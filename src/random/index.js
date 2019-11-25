@@ -1,6 +1,7 @@
 const request = require('request-promise-native');
 
 /* eslint-disable no-param-reassign */
+
 async function random(max, min) {
   if (!min) {
     min = 1;
@@ -8,6 +9,10 @@ async function random(max, min) {
 
   if (!max) {
     max = 10;
+  }
+
+  if (min >= max) {
+    return max;
   }
 
   const randomUrl = `https://www.random.org/integers/?num=1&min=${min}&max=${max}&col=1&base=10&format=plain&rnd=new`;
@@ -19,7 +24,7 @@ async function random(max, min) {
       r = Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    if (body) {
+    if (!error && body) {
       r = JSON.parse(body);
     }
   });

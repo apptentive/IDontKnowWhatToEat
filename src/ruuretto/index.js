@@ -1,10 +1,5 @@
-const { list } = require('./list');
-const { add } = require('./add');
-const { listHandler, addHandler } = require('./endpoint');
+const { fireHandler } = require('./endpoint');
 
 module.exports = {
-  list,
-  listHandler,
-  addHandler,
-  add,
+  fireHandler,
 };

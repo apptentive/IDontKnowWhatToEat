@@ -1,16 +1,14 @@
-const request = require('request-promise-native');
 const { list } = require('../restaurant');
+const { random } = require('../random');
 
 async function fireHandler(req, res) {
-  
+  const rs = await list();
+  const r = random(rs.length - 1, 0);
 
-  await request.get(searchUrl, yelpAuth, (error, response, body) => { });
+  // TODO: Filtering here
 
-  const r = await list(req.body.yelpId);
-  return res.send(r);
+  return res.send(rs[r]);
 }
-
-// 
 
 module.exports = {
   fireHandler,
