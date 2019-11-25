@@ -97,7 +97,7 @@ const buildRateRestaurantMessage = (restaurant) => {
           },
           {
             title: 'Rating',
-            value: '3% Positive',
+            value: 'Coming Soon',
             short: true,
           },
         ],

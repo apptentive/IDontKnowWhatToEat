@@ -23,8 +23,8 @@ async function listCategories(responseUrl) {
 }
 
 async function rateResturant(responseUrl, term) {
-  const businesses = await list.search(term);
-  util.respond(responseUrl, UI.buildRateRestaurantMessage(businesses));
+  const business = await list({ names: [term] });
+  util.respond(responseUrl, UI.buildRateRestaurantMessage(business[0]));
 }
 
 const helpText = [
