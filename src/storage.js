@@ -7,7 +7,6 @@ let db = {
   users: [],
 };
 
-
 function getDb() {
   const rawdata = fs.readFileSync(dbPath, 'utf8');
 
