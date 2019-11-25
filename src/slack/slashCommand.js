@@ -1,6 +1,8 @@
 const yelp = require('../yelp');
 const util = require('./util');
-const storage = require('../storage');
+// const { list } = require('../restaurant');
+const { list } = require('../categories');
+
 
 function buildAddRestaurantMessage(restaurants) {
   restaurants.sort((a, b) => a.distance - b.distance);
@@ -69,11 +71,8 @@ async function add(responseUrl, term) {
 }
 
 async function listCategories(responseUrl) {
-  const restaurants = await storage.getAllRestaurants();
-  const categories = restaurants.map((r) => r.categories.map((c) => c.title));
-  const uniqueCategories = [...new Set(...categories)];
-
-  let text = uniqueCategories.sort().join(', ');
+  const categories = await list();
+  let text = categories.sort().join(', ');
 
   if (!text) {
     text = 'No categories yet, be the first to add a restaurant';
