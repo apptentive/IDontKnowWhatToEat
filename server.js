@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const asyncHandler = require('express-async-handler');
 const storage = require('./src/storage');
 const slack = require('./src/slack');
+const restaurant = require('./src/restaurant/endpoint');
+const categories = require('./src/categories');
 
 const app = express();
 const port = 8080;
@@ -63,5 +66,8 @@ app.post('/slash', async (req, res) => {
   slack.slashCommand.parseAndExecute(req.body.text, req.body.response_url);
   res.send();
 });
+
+app.get('/restaurant', asyncHandler(restaurant.getHandler));
+app.get('/categories', asyncHandler(categories.handler));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
