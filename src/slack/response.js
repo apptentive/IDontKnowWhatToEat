@@ -1,5 +1,4 @@
-const storage = require('../storage');
-// const yelp = require('../yelp');
+const user = require('../user');
 const util = require('./util');
 const restaurant = require('../restaurant');
 
@@ -29,10 +28,7 @@ async function parseAndExecute(ops) {
         text: `Thanks! We added ${r.name}`,
       });
 
-      await storage.updateUserReview({
-        slackId: ops.requester.slackId,
-        yelpId: r.id,
-      });
+      await user.addRestaurant(ops.requester.slackId, r.id);
     }
   });
 

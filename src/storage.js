@@ -35,6 +35,10 @@ async function getAllRestaurants() {
   return db.restaurants;
 }
 
+async function getAllUsers() {
+  return db.users;
+}
+
 async function add(restaurant) {
   const existingRestaurantIndex = db.restaurants.findIndex((e) => e.id === restaurant.id);
 
@@ -47,27 +51,16 @@ async function add(restaurant) {
   await writeDb();
 }
 
-async function updateUserReview(ops) {
-  if (!ops.slackId) {
-    return Promise.reject(new Error('Need slackId to update a user'));
-  }
+async function upsertUser(user) {
+  const existingUserIndex = db.users.findIndex((u) => u.slackId === user.slackId);
 
-  if (!ops.yelpId) {
-    return Promise.reject(new Error('Need yelpId to update a user'));
-  }
-
-  const userIndex = db.users.findIndex((u) => u.slackId === ops.slackId);
-
-  if (userIndex >= 0) {
-    db.users[userIndex].addedRestaurants.push(ops.yelpId);
+  if (existingUserIndex >= 0) {
+    db.users[existingUserIndex] = user;
   } else {
-    db.users.push({
-      slackId: ops.slackId,
-      addedRestaurants: [ops.yelpId],
-    });
+    db.users.push(user);
   }
 
-  return writeDb();
+  await writeDb();
 }
 
 function init() {
@@ -85,6 +78,7 @@ module.exports = {
   getDb,
   add,
   getAllRestaurants,
-  updateUserReview,
+  upsertUser,
+  getAllUsers,
   resetDb,
 };
