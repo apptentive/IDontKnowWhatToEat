@@ -1,11 +1,6 @@
 const { list } = require('./list');
 const { add } = require('./add');
 
-//   names: ['sushi', 'kudasai'],
-//   restaurantId: 'totesRestaurantId'
-//   distanceLess: .25, in miles
-//   priceLess: 1,2,3,4
-//   categories: ['sushi', 'kudasai']
 async function listHandler(req, res) {
   const listOpts = {};
 
