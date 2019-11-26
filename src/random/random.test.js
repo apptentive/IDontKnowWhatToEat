@@ -8,7 +8,7 @@ test('should be random with no params', async () => {
 
 test('should be random with min', async () => {
   const r = await random(10, 5);
-  expect(r).toBeGreaterThan(5);
+  expect(r).toBeGreaterThanOrEqual(5);
 });
 
 test('should be random with max only', async () => {

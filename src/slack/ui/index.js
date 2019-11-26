@@ -130,7 +130,160 @@ const buildRateRestaurantMessage = (restaurant) => {
   };
 };
 
+const buildRouletteSelectors = (categories = []) => {
+  if (!categories.length) {
+    return {};
+  }
+
+  return {
+    text: 'To get started, narrow down the selection of resturants below.',
+    response_type: 'in_channel',
+    attachments: [
+      {
+        text: 'Choose a type of food:',
+        fallback: 'You are unable to choose a type of food.',
+        color: '#3AA3E3',
+        attachment_type: 'default',
+        callback_id: 'category_selection',
+        actions: [
+          {
+            name: 'category_list',
+            text: 'Select a category of food...',
+            type: 'select',
+            options: categories.map((category) => ({ text: category, value: category })),
+          },
+        ],
+      },
+      {
+        text: "Choose a maximum distance you're willing to walk:",
+        fallback: 'You are unable to choose a distance.',
+        color: '#3AA3E3',
+        attachment_type: 'default',
+        callback_id: 'distance_selection',
+        actions: [
+          {
+            name: 'distance_list',
+            text: 'Select a distance...',
+            type: 'select',
+            options: [
+              {
+                text: 'Any',
+                value: 'any',
+              },
+              {
+                text: 'Near',
+                value: 'near',
+              },
+              {
+                text: 'Far',
+                value: 'far',
+              },
+              {
+                text: 'Real Far',
+                value: 'real_far',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        text: "Choose a maximum price range you're willing to pay:",
+        fallback: 'You are unable to choose a price range.',
+        color: '#3AA3E3',
+        attachment_type: 'default',
+        callback_id: 'price_selection',
+        actions: [
+          {
+            name: 'price_list',
+            text: 'Select a price range...',
+            type: 'select',
+            options: [
+              {
+                text: '$',
+                value: '1',
+              },
+              {
+                text: '$$',
+                value: '2',
+              },
+              {
+                text: '$$$',
+                value: '3',
+              },
+              {
+                text: '$$$$',
+                value: '4',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        text: 'Choose a minimum rating:',
+        fallback: 'You are unable to choose a minimum rating.',
+        color: '#3AA3E3',
+        attachment_type: 'default',
+        callback_id: 'rating_selection',
+        actions: [
+          {
+            name: 'rating_list',
+            text: 'Select a rating range...',
+            type: 'select',
+            options: [
+              {
+                text: '$',
+                value: '1',
+              },
+              {
+                text: '$$',
+                value: '2',
+              },
+              {
+                text: '$$$',
+                value: '3',
+              },
+              {
+                text: '$$$$',
+                value: '4',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        text: '',
+        fallback: 'You are unable to choose.',
+        callback_id: 'submit',
+        color: '#3AA3E3',
+        attachment_type: 'default',
+        actions: [
+          {
+            name: 'submit',
+            text: 'Submit',
+            type: 'button',
+            value: 'submit',
+          },
+          {
+            name: 'submit',
+            text: 'Random',
+            style: 'danger',
+            type: 'button',
+            value: 'random',
+            confirm: {
+              title: 'Are you sure?',
+              text: 'The illusion of choice is the greatest magic trick ever performed.',
+              ok_text: '🐶',
+              dismiss_text: '🐱',
+            },
+          },
+        ],
+      },
+    ],
+  };
+};
+
 module.exports = {
   buildAddRestaurantMessage,
   buildRateRestaurantMessage,
+  buildRouletteSelectors,
 };
