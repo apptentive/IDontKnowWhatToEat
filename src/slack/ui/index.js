@@ -231,19 +231,19 @@ const buildRouletteSelectors = (categories = []) => {
             type: 'select',
             options: [
               {
-                text: '$',
+                text: '🙃',
                 value: '1',
               },
               {
-                text: '$$',
+                text: '🙂',
                 value: '2',
               },
               {
-                text: '$$$',
+                text: '😃',
                 value: '3',
               },
               {
-                text: '$$$$',
+                text: '🤩',
                 value: '4',
               },
             ],
