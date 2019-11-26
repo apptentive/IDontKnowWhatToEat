@@ -1,12 +1,9 @@
 const { list } = require('../restaurant');
-// const { listUsers } = require('../user');
+const { addLove } = require('./love');
 
 async function loveHandler(req, res) {
   const restaurants = await list();
-  // const users = await listUsers();
-
-  // TODO: Count restaurant id count across users
-  // const rs = restaurants.map(r => )
+  await addLove(restaurants);
 
   res.send(restaurants);
 }
