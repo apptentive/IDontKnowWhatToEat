@@ -5,7 +5,7 @@ async function list() {
   return us;
 }
 
-async function updateMetaDataString(slackId, userColumn, string) {
+async function addMetaData(slackId, userColumn, obj) {
   if (!slackId) {
     return Promise.reject(new Error('Need slackId to update a user'));
   }
@@ -19,7 +19,7 @@ async function updateMetaDataString(slackId, userColumn, string) {
   }
 
   if (user && user[userColumn]) {
-    user[userColumn].push(string);
+    user[userColumn].push(obj);
     user[userColumn] = [...new Set(user[userColumn])];
   }
 
@@ -28,16 +28,24 @@ async function updateMetaDataString(slackId, userColumn, string) {
   return user;
 }
 
-async function deleteMetaDataString(slackId, userColumn, string) {
+async function deleteMetaData(slackId, userColumn, obj) {
   if (!slackId) {
     return Promise.reject(new Error('Need slackId to update a user'));
+  }
+
+  if (!userColumn) {
+    return Promise.reject(new Error('Need userColumn'));
   }
 
   const users = await list();
   const user = users.find((u) => u.slackId === slackId);
 
+  if (!obj) {
+    return Promise.resolve(user);
+  }
+
   if (user && user[userColumn]) {
-    user[userColumn] = user[userColumn].filter((c) => c !== string);
+    user[userColumn] = user[userColumn].filter((c) => c !== obj);
   }
 
   await storage.upsertUser(user);
@@ -45,66 +53,8 @@ async function deleteMetaDataString(slackId, userColumn, string) {
   return user;
 }
 
-async function addRestaurant(slackId, restaurantId) {
-  if (!slackId) {
-    return Promise.reject(new Error('Need slackId to update a user'));
-  }
-
-  if (!restaurantId) {
-    return Promise.reject(new Error('Need restaurantId to update a user'));
-  }
-
-  const user = updateMetaDataString(slackId, 'addedRestaurants', restaurantId);
-
-  return user;
-}
-
-async function removeRestaurant(slackId, restaurantId) {
-  if (!slackId) {
-    return Promise.reject(new Error('Need slackId to update a user'));
-  }
-
-  if (!restaurantId) {
-    return Promise.reject(new Error('Need restaurantId to update a user'));
-  }
-
-  const user = deleteMetaDataString(slackId, 'addedRestaurants', restaurantId);
-
-  return user;
-}
-
-async function love(slackId, restaurantId) {
-  if (!slackId) {
-    return Promise.reject(new Error('Need slackId to update a user'));
-  }
-
-  if (!restaurantId) {
-    return Promise.reject(new Error('Need restaurantId to update a user'));
-  }
-
-  const user = updateMetaDataString(slackId, 'loves', restaurantId);
-
-  return user;
-}
-
-async function hate(slackId, restaurantId) {
-  if (!slackId) {
-    return Promise.reject(new Error('Need slackId to update a user'));
-  }
-
-  if (!restaurantId) {
-    return Promise.reject(new Error('Need restaurantId to update a user'));
-  }
-
-  const user = updateMetaDataString(slackId, 'hate', restaurantId);
-
-  return user;
-}
-
 module.exports = {
-  addRestaurant,
-  removeRestaurant,
   list,
-  updateMetaDataString,
-  deleteMetaDataString,
+  addMetaData,
+  deleteMetaData,
 };
