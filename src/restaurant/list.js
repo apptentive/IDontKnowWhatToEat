@@ -8,7 +8,7 @@ const { addDistance } = require('../office');
 //   names: ['sushi', 'kudasai'],
 //   restaurantId: 'totesRestaurantId'
 //   distanceLess: .25, in miles
-//   price: 1,2,3,4
+//   priceLess: 1,2,3,4
 //   categories: ['sushi', 'kudasai']
 // }
 async function list(criteria) {
@@ -33,6 +33,10 @@ async function list(criteria) {
     if (criteria.distanceLess) {
       await addDistance(rs);
       rs = rs.filter((r) => r.distance <= criteria.distanceLess);
+    }
+
+    if (criteria.priceLess) {
+      rs = rs.filter((r) => r.yelpPrice.length <= criteria.priceLess);
     }
 
     // TODO rando pick one thats loved plus unknown, plus 5% hated

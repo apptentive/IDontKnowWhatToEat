@@ -21,8 +21,8 @@ async function listHandler(req, res) {
     listOpts.distanceLess = req.body.distanceLess;
   }
 
-  if (req.body.price) {
-    listOpts.price = req.body.price;
+  if (req.body.priceLess && parseInt(req.body.priceLess, 10)) {
+    listOpts.priceLess = parseInt(req.body.priceLess, 10);
   }
 
   if (req.body.categories) {
