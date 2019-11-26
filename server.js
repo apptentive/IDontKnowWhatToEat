@@ -72,6 +72,7 @@ app.get('/restaurant', asyncHandler(restaurant.listHandler));
 app.post('/restaurant', asyncHandler(restaurant.addHandler));
 
 app.get('/categories', asyncHandler(categories.handler));
+app.post('/categories', asyncHandler(categories.handler));
 
 app.get('/ruutetto', asyncHandler(ruutetto.fireHandler));
 
