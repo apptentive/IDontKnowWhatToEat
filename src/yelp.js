@@ -1,9 +1,5 @@
 const request = require('request-promise-native');
-
-const location = {
-  longitude: '-122.342080',
-  latitude: '47.611044',
-};
+const { location } = require('./office');
 
 const yelpAuth = {
   auth: {

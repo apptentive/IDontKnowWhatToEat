@@ -70,7 +70,7 @@ app.post('/slash', async (req, res) => {
 });
 
 app.post('/restaurant', asyncHandler(restaurant.listHandler));
-app.post('/restaurant', asyncHandler(restaurant.addHandler));
+app.post('/restaurant/add', asyncHandler(restaurant.addHandler));
 
 app.post('/categories', asyncHandler(categories.handler));
 

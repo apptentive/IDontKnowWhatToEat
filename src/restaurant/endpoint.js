@@ -1,8 +1,35 @@
 const { list } = require('./list');
 const { add } = require('./add');
 
+//   names: ['sushi', 'kudasai'],
+//   restaurantId: 'totesRestaurantId'
+//   distanceLess: .25, in miles
+//   priceLess: 1,2,3,4
+//   categories: ['sushi', 'kudasai']
 async function listHandler(req, res) {
-  const r = await list();
+  const listOpts = {};
+
+  if (req.body.names) {
+    listOpts.names = req.body.names;
+  }
+
+  if (req.body.restaurantId) {
+    listOpts.restaurantId = req.body.restaurantId;
+  }
+
+  if (req.body.distanceLess) {
+    listOpts.distanceLess = req.body.distanceLess;
+  }
+
+  if (req.body.price) {
+    listOpts.price = req.body.price;
+  }
+
+  if (req.body.categories) {
+    listOpts.categories = req.body.categories;
+  }
+
+  const r = await list(listOpts);
   res.send(r);
 }
 

@@ -1,17 +1,9 @@
 const { list } = require('../restaurant');
-const { list: listUsers } = require('../user');
+const { addLove } = require('./love');
 
 async function loveHandler(req, res) {
   const restaurants = await list();
-  const users = await listUsers();
-
-  restaurants.forEach((r) => {
-    const loves = users.map((u) => u.loves.filter((l) => l === r.id));
-    // eslint-disable-next-line no-param-reassign
-    r.loveCount = loves.reduce((p, c) => p.length + c.length);
-  });
-
-  restaurants.sort((a, b) => a.loveCount < b.loveCount);
+  await addLove(restaurants);
 
   res.send(restaurants);
 }
