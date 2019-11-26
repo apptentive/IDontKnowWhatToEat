@@ -26,7 +26,7 @@ async function listHandler(req, res) {
   }
 
   if (req.body.categories) {
-    listOpts.categories = req.body.categories;
+    listOpts.categories = JSON.parse(req.body.categories);
   }
 
   const r = await list(listOpts);

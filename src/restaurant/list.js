@@ -26,6 +26,17 @@ async function list(criteria) {
       });
     }
 
+    if (criteria.categories) {
+      criteria.categories.forEach((cat) => {
+        const catOpts = {
+          keys: ['categories.title'],
+        };
+
+        const catFuse = new Fuse(rs, catOpts);
+        rs = catFuse.search(cat);
+      });
+    }
+
     if (criteria.restaurantId) {
       rs = rs.filter((r) => r.id === criteria.restaurantId);
     }
