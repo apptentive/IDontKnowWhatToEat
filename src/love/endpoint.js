@@ -11,6 +11,8 @@ async function loveHandler(req, res) {
     r.loveCount = loves.reduce((p, c) => p.length + c.length);
   });
 
+  restaurants.sort((a, b) => a.loveCount < b.loveCount);
+
   res.send(restaurants);
 }
 
