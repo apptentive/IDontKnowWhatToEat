@@ -5,7 +5,8 @@ const storage = require('./src/storage');
 const slack = require('./src/slack');
 const restaurant = require('./src/restaurant');
 const categories = require('./src/categories');
-const ruutetto = require('./src/ruuretto');
+const ruuretto = require('./src/ruuretto');
+const love = require('./src/love');
 
 const app = express();
 const port = 8080;
@@ -68,11 +69,13 @@ app.post('/slash', async (req, res) => {
   res.send();
 });
 
-app.get('/restaurant', asyncHandler(restaurant.listHandler));
+app.post('/restaurant', asyncHandler(restaurant.listHandler));
 app.post('/restaurant', asyncHandler(restaurant.addHandler));
 
-app.get('/categories', asyncHandler(categories.handler));
+app.post('/categories', asyncHandler(categories.handler));
 
-app.get('/ruutetto', asyncHandler(ruutetto.fireHandler));
+app.post('/ruuretto', asyncHandler(ruuretto.fireHandler));
+
+app.post('/loves', asyncHandler(love.loveHandler));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

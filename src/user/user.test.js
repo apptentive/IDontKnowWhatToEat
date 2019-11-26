@@ -3,7 +3,7 @@ const {
   list,
   addMetaData,
   deleteMetaData,
-} = require('./user');
+} = require('./index');
 
 beforeEach(() => {
   storage.resetDb();

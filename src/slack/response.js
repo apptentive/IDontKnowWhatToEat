@@ -28,7 +28,7 @@ async function parseAndExecute(ops) {
         text: `Thanks! We added ${r.name}`,
       });
 
-      await user.addRestaurant(ops.requester.slackId, r.id);
+      await user.addMetaData(ops.requester.slackId, 'addedRestaurants', r.id);
     }
   });
 
