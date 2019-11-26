@@ -27,7 +27,19 @@ async function rateResturant(responseUrl, term) {
   util.respond(responseUrl, UI.buildRateRestaurantMessage(business[0]));
 }
 
-const helpText = [
+async function pickResturant(responseUrl) {
+  const c = await categories.list();
+  util.respond(responseUrl, UI.buildRouletteSelectors(c));
+}
+
+async function showHelp(responseUrl) {
+  util.respond(responseUrl, {
+    // eslint-disable-next-line no-use-before-define
+    text: `Available Commands:\n${commands.map((h) => `\`${h.command}\`, \`${h.shortCommand}\`: \n>${h.helpText}`).join('\n')}`,
+  });
+}
+
+const commands = [
   {
     command: 'add',
     shortCommand: 'a',
@@ -41,6 +53,18 @@ const helpText = [
     method: listCategories,
   },
   {
+    command: 'help',
+    shortCommand: 'h',
+    helpText: 'returns a list of avaliable commands',
+    method: showHelp,
+  },
+  {
+    command: 'pick',
+    shortCommand: '(no command)',
+    helpText: 'pick a resturant',
+    method: pickResturant,
+  },
+  {
     command: 'rate',
     shortCommand: 'r',
     helpText: 'rate a resturant from the lists all our restaurants',
@@ -51,29 +75,29 @@ const helpText = [
 async function parseAndExecute(slashCommandString, responseUrl) {
   // eslint-disable-next-line no-param-reassign
   slashCommandString = slashCommandString.trim();
+  const lower = slashCommandString.toLowerCase();
+
+  if (!slashCommandString) {
+    pickResturant(responseUrl);
+    return;
+  }
 
   let shouldReturnHelpText = true;
-
-  helpText.forEach((c) => {
-    const lower = slashCommandString.toLowerCase();
+  commands.forEach((c) => {
     if (lower.startsWith(c.command) || lower.startsWith(c.shortCommand)) {
       let start = c.shortCommand.length;
       if (lower.startsWith(c.command)) {
         start = c.command.length;
       }
+      const params = slashCommandString.substring(start, slashCommandString.length).trim();
 
-      c.method(responseUrl, slashCommandString.substring(start, slashCommandString.length).trim());
-
+      c.method(responseUrl, params);
       shouldReturnHelpText = false;
     }
   });
 
   if (shouldReturnHelpText) {
-    util.respond(responseUrl, {
-      text: `Available Commands:\n${helpText
-        .map((h) => `\`${h.command}\`, \`${h.shortCommand}\`: \n>${h.helpText}`)
-        .join('\n')}`,
-    });
+    showHelp(responseUrl);
   }
 }
 

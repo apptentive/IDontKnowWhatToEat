@@ -1,6 +1,7 @@
 const user = require('../user');
 const util = require('./util');
 const restaurant = require('../restaurant');
+const { love, hate } = require('../love');
 
 async function addRestaurant(id) {
   const r = await restaurant.add(id);
@@ -29,6 +30,20 @@ async function parseAndExecute(ops) {
       });
 
       await user.addMetaData(ops.requester.slackId, 'addedRestaurants', r.id);
+      return;
+    }
+    if (a.name === 'love') {
+      util.respond(ops.responseUrl, {
+        text: `Sweet, you ${a.value} it!`,
+      });
+      await love(ops.requester.slackId, a.callback_id);
+      return;
+    }
+    if (a.name === 'hate') {
+      util.respond(ops.responseUrl, {
+        text: `Sweet, you ${a.value} it!`,
+      });
+      await hate(ops.requester.slackId, a.callback_id);
     }
   });
 
