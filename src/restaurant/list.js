@@ -1,6 +1,5 @@
 const Fuse = require('fuse.js');
 const storage = require('../storage');
-const { addLove } = require('../love');
 const { addDistance } = require('../office');
 
 // criteria is optional and an object of and filters
