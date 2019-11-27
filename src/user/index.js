@@ -53,11 +53,6 @@ async function deleteMetaData(slackId, userColumn, obj) {
   return user;
 }
 
-// picks a restaurant given a set  
-async function ruuretto() {
-
-}
-
 module.exports = {
   list,
   addMetaData,
