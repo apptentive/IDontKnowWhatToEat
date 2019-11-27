@@ -27,18 +27,20 @@ async function rateResturant(responseUrl, term) {
   util.respond(responseUrl, UI.buildRateRestaurantMessage(business[0]));
 }
 
-async function pickResturant(responseUrl, payload) {
+async function pickResturant(responseUrl, slackId) {
   // TODO This shows the selectors but no bulk sending of selection back & no session means not used
   // const c = await categories.list();
   // util.respond(responseUrl, UI.buildRouletteSelectors(c));
-  const business = await list({ limit: 1, ruuretto: [payload.user.id] });
+  const business = await list({ limit: 1, ruuretto: [slackId] });
   util.respond(responseUrl, UI.buildChosenRestaurantMessage(business[0]));
 }
 
 async function showHelp(responseUrl) {
   util.respond(responseUrl, {
     // eslint-disable-next-line no-use-before-define
-    text: `Available Commands:\n${commands.map((h) => `\`${h.command}\`, \`${h.shortCommand}\`: \n>${h.helpText}`).join('\n')}`,
+    text: `Available Commands:\n${commands
+      .map((h) => `\`${h.command}\`, \`${h.shortCommand}\`: \n>${h.helpText}`)
+      .join('\n')}`,
   });
 }
 
@@ -75,13 +77,13 @@ const commands = [
   },
 ];
 
-async function parseAndExecute(slashCommandString, responseUrl, payload) {
+async function parseAndExecute(slashCommandString, responseUrl, slackId) {
   // eslint-disable-next-line no-param-reassign
   slashCommandString = slashCommandString.trim();
   const lower = slashCommandString.toLowerCase();
 
   if (!slashCommandString) {
-    pickResturant(responseUrl, payload);
+    pickResturant(responseUrl, slackId);
     return;
   }
 

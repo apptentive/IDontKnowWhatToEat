@@ -1,3 +1,5 @@
+// const { distance } = require('../../office');
+
 const buildChosenRestaurantMessage = (r) => {
   const blocks = [
     {
@@ -6,15 +8,15 @@ const buildChosenRestaurantMessage = (r) => {
         type: 'mrkdwn',
         text: [
           `*<${r.url}|${r.name}>*`,
-          `Price: ${r.price}`,
-          `Distance: ${Math.round(r.distance * 100) / 100}`,
+          `Price: ${r.yelpPrice}`,
+          // `Distance: ${Math.round(r.distance * 100) / 100}`,
           `Address: ${r.address}`,
           `Phone: ${r.phone}`,
         ].join('\n'),
       },
       accessory: {
         type: 'image',
-        image_url: r.image,
+        imageUrl: r.image,
         alt_text: r.name,
       },
     },
