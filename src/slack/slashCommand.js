@@ -27,9 +27,12 @@ async function rateResturant(responseUrl, term) {
   util.respond(responseUrl, UI.buildRateRestaurantMessage(business[0]));
 }
 
-async function pickResturant(responseUrl) {
-  const c = await categories.list();
-  util.respond(responseUrl, UI.buildRouletteSelectors(c));
+async function pickResturant(responseUrl, payload) {
+  // TODO This shows the selectors, but no bulk sending of selection back and no session means not used.
+  // const c = await categories.list();
+  // util.respond(responseUrl, UI.buildRouletteSelectors(c));
+  const business = await list({ limit: 1, ruuretto: [payload.user.id] });
+  util.respond(responseUrl, UI.buildChosenRestaurantMessage(business[0]));
 }
 
 async function showHelp(responseUrl) {
@@ -72,13 +75,13 @@ const commands = [
   },
 ];
 
-async function parseAndExecute(slashCommandString, responseUrl) {
+async function parseAndExecute(slashCommandString, responseUrl, payload) {
   // eslint-disable-next-line no-param-reassign
   slashCommandString = slashCommandString.trim();
   const lower = slashCommandString.toLowerCase();
 
   if (!slashCommandString) {
-    pickResturant(responseUrl);
+    pickResturant(responseUrl, payload);
     return;
   }
 

@@ -22,6 +22,8 @@ async function parseAndExecute(ops) {
     return Promise.reject(new Error('need requester.slackId'));
   }
 
+  // Timestamp for keeping track of session
+  // const session = ops.original_message.ts;
   // if (ops.callback_id === 'category_selection') {
   //   const { value } = ops.actions[0].selected_options[0];
   // }
