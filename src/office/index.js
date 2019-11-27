@@ -3,6 +3,7 @@ const office = {
   latitude: '47.611044',
 };
 
+// https://www.geodatasource.com/developers/javascript
 async function distance(longitude, latitude) {
   if ((office.longitude === longitude) && (office.latitude === latitude)) {
     return 0;

@@ -20,8 +20,16 @@ async function listHandler(req, res) {
     listOpts.priceLess = parseInt(req.body.priceLess, 10);
   }
 
+  if (req.body.limit) {
+    listOpts.limit = parseInt(req.body.limit, 10) || 10;
+  }
+
   if (req.body.categories) {
     listOpts.categories = JSON.parse(req.body.categories);
+  }
+
+  if (req.body.ruuretto) {
+    listOpts.ruuretto = JSON.parse(req.body.ruuretto) || [];
   }
 
   const r = await list(listOpts);

@@ -1,5 +1,5 @@
 const { list } = require('../restaurant');
-const { addLove } = require('./love');
+const { addLove, addHate } = require('./love');
 
 async function loveHandler(req, res) {
   const restaurants = await list();
@@ -8,6 +8,14 @@ async function loveHandler(req, res) {
   res.send(restaurants);
 }
 
+async function hateHandler(req, res) {
+  const restaurants = await list();
+  await addHate(restaurants);
+
+  res.send(restaurants);
+}
+
 module.exports = {
   loveHandler,
+  hateHandler,
 };

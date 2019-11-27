@@ -20,6 +20,18 @@ async function addLove(restaurants) {
   restaurants.sort((a, b) => a.loveCount < b.loveCount);
 }
 
+async function addHate(restaurants) {
+  const users = await user.list();
+
+  restaurants.forEach((r) => {
+    const hates = users.map((u) => u.hates.filter((l) => l === r.id));
+    // eslint-disable-next-line no-param-reassign
+    r.hateCount = hates.reduce((p, c) => p.length + c.length);
+  });
+
+  restaurants.sort((a, b) => a.hateCount < b.hateCount);
+}
+
 async function hate(slackId, restaurantId) {
   await user.addMetaData(slackId, hateCol, restaurantId);
   await user.deleteMetaData(slackId, loveCol, restaurantId);
@@ -29,4 +41,5 @@ module.exports = {
   love,
   hate,
   addLove,
+  addHate,
 };
