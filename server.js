@@ -15,6 +15,7 @@ if (!process.env.YELP_TOKEN) {
   process.exit(1);
 }
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', async (req, res) => {
