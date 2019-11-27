@@ -32,7 +32,7 @@ async function pickResturant(responseUrl, slackId) {
   // const c = await categories.list();
   // util.respond(responseUrl, UI.buildRouletteSelectors(c));
   const business = await list({ limit: 1, ruuretto: [slackId] });
-  util.respond(responseUrl, UI.buildChosenRestaurantMessage(business[0]));
+  util.respond(responseUrl, UI.buildRateRestaurantMessage(business[0]));
 }
 
 async function showHelp(responseUrl) {

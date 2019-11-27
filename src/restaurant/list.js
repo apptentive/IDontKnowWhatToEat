@@ -56,12 +56,14 @@ async function list(criteria) {
     if (criteria.ruuretto) {
       const users = await listUsers();
 
-      const filteredUsers = users.filter((u) => criteria.ruuretto.includes(u.slackId));
-      let hatedRestaurants = filteredUsers.map((u) => u.hates);
-      hatedRestaurants = hatedRestaurants.flat(Infinity);
-      hatedRestaurants = [...new Set(hatedRestaurants)];
+      if (users) {
+        const filteredUsers = users.filter((u) => criteria.ruuretto.includes(u.slackId));
+        let hatedRestaurants = filteredUsers.map((u) => u.hates);
+        hatedRestaurants = hatedRestaurants.flat(Infinity);
+        hatedRestaurants = [...new Set(hatedRestaurants)];
 
-      rs = rs.filter((r) => !hatedRestaurants.includes(r.id));
+        rs = rs.filter((r) => !hatedRestaurants.includes(r.id));
+      }
     }
 
 
