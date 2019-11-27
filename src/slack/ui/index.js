@@ -1,3 +1,29 @@
+const buildChosenRestaurantMessage = (r) => {
+  const blocks = [
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: [
+          `*<${r.url}|${r.name}>*`,
+          `Price: ${r.price}`,
+          `Distance: ${Math.round(r.distance * 100) / 100}`,
+          `Address: ${r.address}`,
+          `Phone: ${r.phone}`,
+        ].join('\n'),
+      },
+      accessory: {
+        type: 'image',
+        image_url: r.image,
+        alt_text: r.name,
+      },
+    },
+  ];
+
+  return {
+    blocks,
+  };
+};
 const buildAddRestaurantMessage = (restaurants) => {
   if (!restaurants || !restaurants.length || restaurants.length === 0) {
     return {
@@ -283,6 +309,7 @@ const buildRouletteSelectors = (categories = []) => {
 };
 
 module.exports = {
+  buildChosenRestaurantMessage,
   buildAddRestaurantMessage,
   buildRateRestaurantMessage,
   buildRouletteSelectors,

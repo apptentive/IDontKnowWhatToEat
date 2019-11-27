@@ -28,7 +28,7 @@ async function rateResturant(responseUrl, term) {
 }
 
 async function pickResturant(responseUrl, payload) {
-  // TODO This shows the selectors, but no bulk sending of selection back and no session means not used.
+  // TODO This shows the selectors but no bulk sending of selection back & no session means not used
   // const c = await categories.list();
   // util.respond(responseUrl, UI.buildRouletteSelectors(c));
   const business = await list({ limit: 1, ruuretto: [payload.user.id] });
