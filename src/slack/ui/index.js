@@ -250,34 +250,34 @@ const buildRouletteSelectors = (categories = []) => {
           },
         ],
       },
-      {
-        text: '',
-        fallback: 'You are unable to choose.',
-        callback_id: 'submit',
-        color: '#3AA3E3',
-        attachment_type: 'default',
-        actions: [
-          {
-            name: 'submit',
-            text: 'Submit',
-            type: 'button',
-            value: 'submit',
-          },
-          {
-            name: 'submit',
-            text: 'Random',
-            style: 'danger',
-            type: 'button',
-            value: 'random',
-            confirm: {
-              title: 'Are you sure?',
-              text: 'The illusion of choice is the greatest magic trick ever performed.',
-              ok_text: '🐶',
-              dismiss_text: '🐱',
-            },
-          },
-        ],
-      },
+      // {
+      //   text: '',
+      //   fallback: 'You are unable to choose.',
+      //   callback_id: 'submit',
+      //   color: '#3AA3E3',
+      //   attachment_type: 'default',
+      //   actions: [
+      //     {
+      //       name: 'submit',
+      //       text: 'Submit',
+      //       type: 'button',
+      //       value: 'submit',
+      //     },
+      //     {
+      //       name: 'submit',
+      //       text: 'Random',
+      //       style: 'danger',
+      //       type: 'button',
+      //       value: 'random',
+      //       confirm: {
+      //         title: 'Are you sure?',
+      //         text: 'The illusion of choice is the greatest magic trick ever performed.',
+      //         ok_text: '🐶',
+      //         dismiss_text: '🐱',
+      //       },
+      //     },
+      //   ],
+      // },
     ],
   };
 };

@@ -22,6 +22,19 @@ async function parseAndExecute(ops) {
     return Promise.reject(new Error('need requester.slackId'));
   }
 
+  // if (ops.callback_id === 'category_selection') {
+  //   const { value } = ops.actions[0].selected_options[0];
+  // }
+  // if (ops.callback_id === 'distance_list') {
+  //   const { value } = ops.actions[0].selected_options[0];
+  // }
+  // if (ops.callback_id === 'price_selection') {
+  //   const { value } = ops.actions[0].selected_options[0];
+  // }
+  // if (ops.callback_id === 'rating_selection') {
+  //   const { value } = ops.actions[0].selected_options[0];
+  // }
+
   ops.actions.forEach(async (a) => {
     if (a.action_id === 'add_restaurant') {
       const r = await addRestaurant(a.value);
@@ -32,6 +45,7 @@ async function parseAndExecute(ops) {
       await user.addMetaData(ops.requester.slackId, 'addedRestaurants', r.id);
       return;
     }
+
     if (a.name === 'love') {
       util.respond(ops.responseUrl, {
         text: `Sweet, you ${a.value} it!`,
