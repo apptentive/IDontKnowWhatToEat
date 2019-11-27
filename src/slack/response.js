@@ -52,14 +52,14 @@ async function parseAndExecute(ops) {
       util.respond(ops.responseUrl, {
         text: `Sweet, you ${a.value} it!`,
       });
-      await love(ops.requester.slackId, a.callback_id);
+      await love(ops.requester.slackId, ops.callback_id);
       return;
     }
     if (a.name === 'hate') {
       util.respond(ops.responseUrl, {
         text: `Sweet, you ${a.value} it!`,
       });
-      await hate(ops.requester.slackId, a.callback_id);
+      await hate(ops.requester.slackId, ops.callback_id);
     }
   });
 
