@@ -5,7 +5,6 @@ const storage = require('./src/storage');
 const slack = require('./src/slack');
 const restaurant = require('./src/restaurant');
 const categories = require('./src/categories');
-const ruuretto = require('./src/ruuretto');
 const love = require('./src/love');
 
 const app = express();
@@ -73,8 +72,6 @@ app.post('/restaurant', asyncHandler(restaurant.listHandler));
 app.post('/restaurant/add', asyncHandler(restaurant.addHandler));
 
 app.post('/categories', asyncHandler(categories.handler));
-
-app.post('/ruuretto', asyncHandler(ruuretto.fireHandler));
 
 app.post('/loves', asyncHandler(love.loveHandler));
 

@@ -1,6 +1,8 @@
 const Fuse = require('fuse.js');
 const storage = require('../storage');
 const { addDistance } = require('../office');
+const { list: listUsers } = require('../user');
+// const { random } = require('../random');
 
 // criteria is optional and an object of and filters
 // {
@@ -9,6 +11,8 @@ const { addDistance } = require('../office');
 //   distanceLess: .25, in miles
 //   priceLess: 1,2,3,4
 //   categories: ['sushi', 'kudasai']
+//   ruuretto: ['slackIds'] GAMBLE TIME BABY!
+//   limit: 10
 // }
 async function list(criteria) {
   let rs = await storage.getAllRestaurants();
@@ -49,13 +53,21 @@ async function list(criteria) {
       rs = rs.filter((r) => r.yelpPrice.length <= criteria.priceLess);
     }
 
-    // TODO rando pick one thats loved plus unknown, plus 5% hated
-    // if (criteria.lovedGreater) {
-    //   if (!rs.loveCount) {
-    //     addLove(rs);
-    //   }
-    //   rs = rs.filter((r) => r.loveCount === criteria.restaurantId);
-    // }
+    if (criteria.ruuretto) {
+      const users = await listUsers();
+
+      const filteredUsers = users.filter((u) => criteria.ruuretto.includes(u.slackId));
+      let hatedRestaurants = filteredUsers.map((u) => u.hates);
+      hatedRestaurants = hatedRestaurants.flat(Infinity);
+      hatedRestaurants = [...new Set(hatedRestaurants)];
+
+      rs = rs.filter((r) => !hatedRestaurants.includes(r.id));
+    }
+
+
+    if (criteria.limit && criteria.limit < rs.length) {
+      rs = rs.splice(0, criteria.limit);
+    }
   }
 
   return rs;
