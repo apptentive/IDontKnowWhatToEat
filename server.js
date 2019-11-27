@@ -64,7 +64,8 @@ app.get('/db', async (req, res) => {
 });
 
 app.post('/slash', async (req, res) => {
-  slack.slashCommand.parseAndExecute(req.body.text, req.body.response_url);
+  const payload = JSON.parse(req.body.payload);
+  slack.slashCommand.parseAndExecute(req.body.text, req.body.response_url, payload);
   res.send();
 });
 
